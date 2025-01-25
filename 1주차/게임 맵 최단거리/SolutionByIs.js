@@ -26,6 +26,5 @@ function solution(maps) {
     }
   }
 
-  console.log("Hello");
   return -1; // 도착점에 도달할 수 없는 경우: -1 반환
 }
