@@ -7,26 +7,27 @@ const rl = readline.createInterface({
 let n = 0, m = 0;       // n: 정점 개수, m: 간선 개수
 let S = 0, T = 0;       // S: 집, T: 회사
 let curLine = 0;
-let graph = new Map();  // 인접 리스트
+let graph = new Map();
 
 function findNodes(start) {
   const visited = new Set();
   const endNode = (start === S ? T : S);
+  const stack = [start];
   
-  function dfs(node) {
+  while (stack.length > 0) {
+    const node = stack.pop();
+    
+    if (visited.has(node)) continue;
     visited.add(node);
     
     for (let next of graph.get(node)) {
-      if (next === endNode)
-        continue;
-      
-      if(!visited.has(next)) {
-        dfs(next);
+      if (next === endNode) continue;
+      if (!visited.has(next)) {
+        stack.push(next);
       }
     }
   }
-
-  dfs(start);
+  
   return visited;
 }
 
@@ -57,4 +58,4 @@ rl.on('line', (line) => {
 });
 
 // 5, 15, 22, 25번 케이스 오답
-// 31~39 케이스 런타임 에러
+// 32~39 케이스 오답
