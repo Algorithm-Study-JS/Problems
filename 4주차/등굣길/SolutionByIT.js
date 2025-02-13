@@ -1,33 +1,25 @@
-function solution(n, m, x, y, r, c, k) {
-    const answer = [];
-    const direction = [["d", 1, 0], ["l", 0, -1], ["r", 0, 1], ["u", -1, 0]];
+function solution(m, n, puddles) {
+    const MOD = 1000000007;
     
-    const memo = new Map();
+    const map = Array.from({ length: n + 1 }, () => Array(m + 1).fill(0));
+    
+    puddles.forEach(([x, y]) => {
+        map[y][x] = -1;
+    });
 
-    function dfs(row, col, move, commands) {
-        const key = `${row},${col},${move}`;
-        
-        if (move === k) {
-            if (row === r - 1 && col === c - 1) {
-                answer.push(commands);
-            }
-            return;
-        }
+    map[1][1] = 1;
 
-        if (memo.has(key)) return;
-        
-        memo.set(key, true);
-
-        for (let [command, dx, dy] of direction) {
-            const newX = row + dx, newY = col + dy;
-            
-            if (newX >= 0 && newY >= 0 && newX < n && newY < m) {
-                dfs(newX, newY, move + 1, commands + command);
+    for (let i = 1; i <= n; i++) {
+        for (let j = 1; j <= m; j++) {
+            if (map[i][j] === -1) {
+                map[i][j] = 0;
+            } else {
+                if (i > 1) map[i][j] += map[i - 1][j];
+                if (j > 1) map[i][j] += map[i][j - 1];
+                map[i][j] %= MOD;
             }
         }
     }
-    
-    dfs(x - 1, y - 1, 0, "");
 
-    return answer.length ? answer[0] : "impossible";
+    return map[n][m];
 }
