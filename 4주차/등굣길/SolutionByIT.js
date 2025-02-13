@@ -9,6 +9,7 @@ function solution(m, n, puddles) {
 
     map[1][1] = 1;
 
+    // 우물 0으로 바꾸고 위쪽, 왼쪽만 보면 가능한 경우 더하기
     for (let i = 1; i <= n; i++) {
         for (let j = 1; j <= m; j++) {
             if (map[i][j] === -1) {
