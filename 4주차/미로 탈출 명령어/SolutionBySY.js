@@ -1,77 +1,74 @@
-function solution(n, m, x, y, r, c, k) {
-  let mustMoveCount = Math.abs(x - r) + Math.abs(y - c);
+function solution(n, m, currR, currC, targetR, targetC, k) {
+    let answer = "";
     
-  // 남은 이동 횟수가 부족하거나 홀짝이 맞지 않으면 불가능
-  if (k < mustMoveCount || (k - mustMoveCount) % 2 === 1) return 'impossible';
-
-  const result = [];
-  // extra = (k - dist) / 2  (남은 이동 횟수를 2로 나눠서 취소되는 쌍의 횟수)
-  if (k > mustMoveCount) {
-    let extra = (k - mustMoveCount) / 2;
-      
-    // 가능한 경우 아래('d')로 한 번 이동하여 여분을 줄인다.
-    while (extra > 0) {
-      if (x < n) {
-        // 만약 아래로 한 칸 이동했을 때 새 맨해튼 거리는
-        let newDist = Math.abs((x + 1) - r) + Math.abs(y - c);
-          
-        // 이동 후 남은 이동 횟수(k-1)와 새 거리의 차이가 짝수여야 함
-        if (k - 1 >= newDist && ((k - 1 - newDist) % 2 === 0)) {
-          x++;     // 아래로 이동
-          k--;     // 남은 이동 횟수 1 감소
-          result.push('d');
-          mustMoveCount = newDist;
-          extra = (k - mustMoveCount) / 2;
-          continue;
+    // 다이렉트로 갈 때 필요한 거리
+    let dist = Math.abs(targetR - currR) + Math.abs(targetC - currC);
+    
+    // 다이렉트로도 못 가거나, 여분의 거리가 짝수가 아니라면 불가능
+    if(dist > k || dist % 2 !== k % 2) return "impossible";
+    
+    // 여분이 있을 때
+    // d, l, rl 순으로 돌아갈거임
+    if(k > dist) {
+        // 한 칸 돌아가면, 다시 돌아와야 하니까 2로 나눠줌
+        let remain = (k - dist) / 2;
+        
+        // d 방향으로 돌아가기
+        while(remain > 0 && currR < n) {
+            answer += "d";
+            k--;
+            currR++;
+            
+            // d로 한 칸 움직인 상태에서 다이렉트 거리와, 남은 거리 갱신
+            dist = Math.abs(targetR - currR) + Math.abs(targetC - currC);
+            remain = (k - dist) / 2;
         }
-      }
-      break;
-    }
-      
-    // 가능한 경우 왼쪽('l')으로 이동
-    while (extra > 0) {
-      if (y > 1) {
-        let newDist = Math.abs(x - r) + Math.abs((y - 1) - c);
-        if (k - 1 >= newDist && ((k - 1 - newDist) % 2 === 0)) {
-          y--;     // 왼쪽으로 이동
-          k--;
-          result.push('l');
-          mustMoveCount = newDist;
-          extra = (k - mustMoveCount) / 2;
-          continue;
+        
+        // l 방향으로 돌아가기
+        while(remain > 0 && currC > 1) {
+            answer += "l";
+            k--;
+            currC--;
+            
+            dist = Math.abs(targetR - currR) + Math.abs(targetC - currC);
+            remain = (k - dist) / 2;
         }
-      }
-      break;
+        
+        // 좌측 하단 구석에 도착했는데도, 돌아가야한다면
+        // rl로 낭비하는게 사전순으로 베스트
+        for(let i = 0; i < remain; i++) {
+            answer += "rl";
+        }
     }
-      
-    // 만약 여전히 extra가 남았다면, 좌우 쌍(r, l) 이동으로 2회씩 소비
-    for (let i = 0; i < extra; i++) {
-      k -= 2;
-      // 여기서는 r 후 l을 진행 – (r,l)는 이동 후 제자리로 돌아오므로 위치 변화 없음
-      result.push('r');
-      result.push('l');
+    
+    // 다이렉트 경로만 남은 상황에서
+    // dlru 순으로 이동하기
+    const distR = Math.abs(targetR - currR);
+    const distC = Math.abs(targetC - currC);
+    
+    if(currR < targetR) {
+        for(let i = 0; i < distR; i++) {
+            answer += "d";
+        }    
     }
-  }
-  
-  // 최종적으로 (x,y)에서 (r,c)까지 직진하는 경로 추가
-  const rowDiff = Math.abs(x - r);
-  const colDiff = Math.abs(y - c);
     
-  if (x < r) {
-    for (let i = 0; i < rowDiff; i++) result.push('d');
-  }
+    if(targetC < currC) {
+        for(let i = 0; i < distC; i++) {
+            answer += "l";
+        }    
+    }
     
-  if (y > c) {
-    for (let i = 0; i < colDiff; i++) result.push('l');
-  }
+    if(currC < targetC) {
+        for(let i = 0; i < distC; i++) {
+            answer += "r";
+        }    
+    }
     
-  if (y < c) {
-    for (let i = 0; i < colDiff; i++) result.push('r');
-  }
+    if(targetR < currR) {
+        for(let i = 0; i < distR; i++) {
+            answer += "u";
+        }    
+    }
     
-  if (x > r) {
-    for (let i = 0; i < rowDiff; i++) result.push('u');
-  }
-
-  return result.join('');
+    return answer;
 }
