@@ -23,11 +23,11 @@ function getCombinations(n) {
 // A가 가진 주사위들의 합 경우와 B가 가진 주사위들의 합 경우 비교
 function compareDice(diceA, diceB) {
     let win = 0;
-    // diceA.forEach(a => {
-    //     diceB.forEach(b => {
-    //         if(a > b) win++;
-    //     })
-    // })
+    diceA.forEach(a => {
+        diceB.forEach(b => {
+            if(a > b) win++;
+        })
+    })
     return win;
 }
 
