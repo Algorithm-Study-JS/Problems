@@ -7,8 +7,8 @@ const rl = readline.createInterface({
 let n = 0, m = 0;       // n: 정점 개수, m: 간선 개수
 let S = 0, T = 0;       // S: 집, T: 회사
 let curLine = 0;
-let graph = new Map();  // 정방향
-let rGraph = new Map(); // 역방향
+let graph = new Map();  //  정방향
+let rGraph = new Map(); //  역방향
 
 function findNodes(start, stop, isReverse) {
   const visited = new Set();
