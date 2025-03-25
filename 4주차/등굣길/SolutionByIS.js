@@ -13,7 +13,7 @@ function solution(m, n, puddles) {
   for (let y = 1; y <= n; y++) {
     for (let x = 1; x <= m; x++) {
       if (puddleArr[y][x]) {
-        dp[y][x] = 0; // 웅덩이면 0
+        dp[y][x] = 0;  // 웅덩이면 0
         continue;
       }
       
