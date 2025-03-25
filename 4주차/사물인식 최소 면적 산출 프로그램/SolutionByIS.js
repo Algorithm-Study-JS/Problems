@@ -14,7 +14,7 @@ rl.on('line', (line) => {
     lines.push(line.split(" ").map(Number));
   }
 }).on('close', () => {
-  // 동일한 색을 가진 점 저장
+  //  동일한 색을 가진 점 저장
   const groups = Array.from({ length: K + 1}, () => []);
 
   for (let i = 0; i < lines.length; i++) {
