@@ -1,6 +1,6 @@
 function solution(n, m, x, y, r, c, k) {
 
-  // 사전순 (d: 하 > l: 좌 > r: 우 > u: 상)
+  //  사전순 (d: 하 > l: 좌 > r: 우 > u: 상)
   const di = ["d", "l", "r", "u"];
   const dx = [1, 0, 0, -1];  
   const dy = [0, -1, 1, 0];
